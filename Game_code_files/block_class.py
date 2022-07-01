@@ -1,10 +1,14 @@
 # Import standard modules.
+import random
 import sys
 
 # Import non-standard modules.
 import pygame
 from pygame.locals import *
  
+
+screen_width = 1200
+screen_height = 1200
  #makes class for block
 class Block(pygame.sprite.Sprite):
     def __init__(self, color, width, height):
@@ -12,6 +16,13 @@ class Block(pygame.sprite.Sprite):
         self.image = pygame.Surface([width, height])
         self.image.fill(color)
         self.rect = self.image.get_rect()
+        self.alive = random.randint(0,1)
+
+    def update_is_alive(self,alive):
+        self.alive = alive
+
+    def is_alive_or_dead(self):
+        return self.alive
 
     #get location of block
     def get_location(self):
@@ -28,11 +39,15 @@ class Block(pygame.sprite.Sprite):
 
 #track all blocks  
 def create_blocks():
-    blocks_group = pygame.sprite.Group()
-    for i in range(0, 10):
-        for j in range(0, 10):
-            block = Block((255, 255, 255), 100, 100)
-            block.rect.x = i*150
-            block.rect.y = j*150
-            blocks_group.add(block)
+    block_width =6
+    block_height =6 
+    blocks_group = []
+    for i in range(0, screen_width//block_width):
+        blocks_group.append([])
+        for j in range(0, screen_height//block_height):
+            block = Block((255, 255, 255), block_width, block_height)
+            block.rect.x = i*block_width
+            block.rect.y = j*block_height
+            blocks_group[i].append(block)
+            
     return blocks_group
